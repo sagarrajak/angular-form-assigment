@@ -47,6 +47,15 @@
             <app-show-error [control]="getControl('gender')"></app-show-error>
         </div>
 
-        <p-button label="Submit" type="Submit" />
+        <div class="flex flex-row">
+            <p-button label="Submit" type="Submit" />
+            <p-button 
+                label="cancel" 
+                *ngIf="showCancelButton" 
+                severity="secondary"
+                (onClick)="restoreForm()" 
+            />
+        </div>
     </form>
 </p-card>
+

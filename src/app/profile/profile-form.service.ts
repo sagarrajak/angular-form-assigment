@@ -8,30 +8,38 @@ enum GenderEnum {
   other = 'other',
 }
 
-export interface ProfileFormInterface {
-  name: string;
-  email: string;
-  phoneNumber: string;
-  address: string;
-  gender?: GenderEnum;
+export interface ProfileFormControl {
+  name: FormControl<string | null> ;
+  email: FormControl<string | null>;
+  phoneNumber: FormControl<number | null>;
+  address: FormControl<string | null>;
+  gender?: FormControl<string | null>;
 }
+
+export type ProfileForm = {[K in keyof ProfileFormControl]: ProfileFormControl[K] extends FormControl<infer T> ? T : any}
 
 @Injectable()
 export class ProfileFormService {
+  private isChange: boolean = false;
+
   constructor() {
     this.profileForm.valueChanges.subscribe((data) => {
-      console.log('Form changes: ', data);
+      if (!this.isChange) {
+        this.isChange = true;
+        this.values = this.profileForm.value as ProfileForm;
+      }
     });
   }
 
-  private values: ProfileFormInterface = {
-    name: '',
-    email: '',
-    phoneNumber: '',
-    address: '',
+  private values: ProfileForm = {
+    name: 'sagar',
+    email: 'sagarrajak858@gmail.com',
+    phoneNumber: 7750811799,
+    address: 'sdsdfsdf',
+    gender: GenderEnum.male
   };
 
-  public profileForm = new FormGroup({
+  public profileForm = new FormGroup<ProfileFormControl>({
     name: new FormControl(this.values.name, [
       Validators.required,
       Validators.min(2),
@@ -47,22 +55,27 @@ export class ProfileFormService {
     address: new FormControl(this.values.address, [Validators.required]),
     gender: new FormControl(this.values.gender, [Validators.required]),
   });
-
+  
+  
   public setInitialValue() {}
 
-  public resetValues() {}
+  public restoreValues() {
+    if (this.isChange && this.values) {
+      for (let key of Object.keys(this.values)) {
+        this.profileForm.get(key)?.setValue((this.values as any)[key])
+      }
+    }
+  }
 
-  public getValues() {}
+  public getValues() {
+    return this.profileForm.value;
+  }
 
-  public isFormDirty() {
+  get isFormDirty() {
     return this.profileForm.dirty;
   }
 
-  private getFormKeys() {
-    return this.profileForm.controls;
-  }
-
-  public getFormControl(key: keyof ReturnType<typeof this.getFormKeys>) {
+  public getFormControl(key: keyof ProfileForm) {
     return this.profileForm.controls[key];
   }
 }

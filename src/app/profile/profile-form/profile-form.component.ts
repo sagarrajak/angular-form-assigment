@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ProfileFormService } from '../profile-form.service';
+import { ProfileForm, ProfileFormService } from '../profile-form.service';
 
 @Component({
   selector: 'app-profile-form',
@@ -17,7 +17,15 @@ export class ProfileFormComponent {
     console.log(this.profileForm.value);
   }
 
-  getControl(key: 'name' | 'email' | 'phoneNumber' | 'address' | 'gender') {
+  getControl(key: keyof ProfileForm) {
     return this.profileFormService.getFormControl(key);
+  }
+
+  get showCancelButton() {
+    return this.profileFormService.isFormDirty;
+  }
+
+  public restoreForm() {
+    this.profileFormService.restoreValues();
   }
 }
