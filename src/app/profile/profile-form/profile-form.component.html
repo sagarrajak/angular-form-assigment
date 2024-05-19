@@ -1,0 +1,52 @@
+<p-card header="Profile info" class="container">
+    <form [formGroup]="profileForm" (ngSubmit)="submitForm()" novalidate class="formContainer">
+        <div class="formItem">
+            <label for="username">Username</label>
+            <input pInputText id="username" aria-describedby="username-help" formControlName="name" />
+            <app-show-error [control]="getControl('name')"></app-show-error>
+        </div>
+        <div class="formItem">
+            <label for="email">Email</label>
+            <input pInputText id="email" aria-describedby="please enter email" formControlName="email" />
+            <app-show-error [control]="getControl('email')"></app-show-error>
+        </div>
+
+        <div class="formItem">
+            <label for="phoneNumber">Phone number</label>
+            <input pInputText id="phoneNumber" aria-describedby="please enter phone number"
+                formControlName="phoneNumber" />
+            <app-show-error [control]="getControl('phoneNumber')"></app-show-error>
+        </div>
+        <div class="formItem">
+            <label for="address">Address</label>
+            <input pInputText id="address" aria-describedby="please enter address" formControlName="address" />
+            <app-show-error [control]="getControl('address')"></app-show-error>
+        </div>
+
+        <div class="formItem">
+            <div class="flex align-items-center">
+                <p-radioButton name="gender" value="male" formControlName="gender" inputId="gender" />
+                <label for="gender" class="ml-2">
+                    Male
+                </label>
+            </div>
+
+            <div class="flex align-items-center">
+                <p-radioButton name="gender" value="female" formControlName="gender" inputId="gender1" />
+                <label for="gender1" class="ml-2">
+                    Female
+                </label>
+            </div>
+
+            <div class="flex align-items-center">
+                <p-radioButton name="gender" value="others" formControlName="gender" inputId="gender2" />
+                <label for="gender2" class="ml-2">
+                    Others
+                </label>
+            </div>
+            <app-show-error [control]="getControl('gender')"></app-show-error>
+        </div>
+
+        <p-button label="Submit" type="Submit" />
+    </form>
+</p-card>

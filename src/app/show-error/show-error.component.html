@@ -1,0 +1,26 @@
+<div class="text-danger" *ngIf="control && control.errors && (control.dirty || control.touched)">
+    <div *ngIf="control.errors.required" class="label label--danger">
+        This field is required
+    </div>
+    <div *ngIf="control.errors.unique" class="label label--danger">
+        {{ control?.errors.unique }}
+    </div>
+    <div *ngIf="control.errors.lessThen" class="label label--danger">
+        {{ control.errors.lessThen }}
+    </div>
+    <div *ngIf="control.errors.greaterThan" class="label label--danger">
+        {{ control.errors.greaterThan }}
+    </div>
+    <div *ngIf="control.errors.email" class="label label--danger">
+        {{ control.errors.email }}
+    </div>
+    <div *ngIf="control.errors.mobile" class="label label--danger">
+        {{ control.errors.mobile }}
+    </div>
+    <div *ngIf="control.errors.confirmPassword" class="label label--danger">
+        {{ control.errors.confirmPassword }}
+    </div>
+    <div *ngIf="control.errors.phoneNumber" class="label label--danger">
+        Invalid phone number
+    </div>
+</div>
