@@ -13,7 +13,9 @@ export class ProfileFormComponent {
     this.profileFormService.setInitialValue(profileForm);
   }
 
-  constructor(private readonly profileFormService: ProfileFormService) {
+  constructor(
+    private readonly profileFormService: ProfileFormService,
+  ) {
     this.profileFormService.addSubsciber((value) => {
         this.onFormDirty.emit(value);
     });
@@ -23,8 +25,8 @@ export class ProfileFormComponent {
     return this.profileFormService.formGroup;
   }
 
-  submitForm() {
-    console.log(this.profileForm.value);
+  getData() {
+    return this.profileFormService.getValues();
   }
 
   getControl(key: keyof ProfileForm) {

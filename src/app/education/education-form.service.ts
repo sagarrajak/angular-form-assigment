@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { phoneNumberValidator } from '../validators/phoneNumberValidator';
 import { AbstractBaseUserRestoreForm } from '../services/UserRestoreFormInterface';
 
 export type EducationForm = {
@@ -16,6 +15,23 @@ type EducationFormControl = {
 export class EducationFormService extends AbstractBaseUserRestoreForm<
   FormGroup<EducationFormControl>
 > {
+  values: EducationForm = {
+    graduactionMarks: 0,
+    postgraducationMarks: 0,
+  };
+
+  public formGroup = new FormGroup<EducationFormControl>({
+    graduactionMarks: new FormControl(this.values.graduactionMarks, [
+      Validators.required,
+      Validators.max(100),
+      Validators.min(0),
+    ]),
+    postgraducationMarks: new FormControl(this.values.postgraducationMarks, [
+      Validators.required,
+      Validators.max(100),
+      Validators.min(0),
+    ]),
+  });
 
 
   constructor() {
@@ -32,6 +48,7 @@ export class EducationFormService extends AbstractBaseUserRestoreForm<
 
   restoreValues(): void {
     if (this.isChange) {
+      console.log(this.values);
       this.formGroup.reset(this.values);
       this.isChange = 0;
       this.subscriber.forEach(callBack => {
@@ -40,23 +57,7 @@ export class EducationFormService extends AbstractBaseUserRestoreForm<
     }
   }
 
-  values: EducationForm = {
-    graduactionMarks: 0,
-    postgraducationMarks: 0,
-  };
-
-  public formGroup = new FormGroup<EducationFormControl>({
-    graduactionMarks: new FormControl(this.values.graduactionMarks, [
-      Validators.required,
-      Validators.max(100),
-      Validators.min(0),
-    ]),
-    postgraducationMarks: new FormControl(this.values.postgraducationMarks, [
-      Validators.required,
-      Validators.email,
-    ]),
-  });
-
+ 
   setInitialValue(educationForm: EducationForm) {
     this.values = educationForm;
     this.isChange = 0;

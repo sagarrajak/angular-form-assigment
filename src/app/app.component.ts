@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { EducationModule } from './education/education.module';
 import { ProfileModule } from './profile/profile.module';
@@ -9,6 +9,9 @@ import { EducationFormComponent } from './education/education-form/education-for
 import { ProfileFormComponent } from './profile/profile-form/profile-form.component';
 import { GenderEnum, ProfileForm } from './profile/profile-form.service';
 import { EducationForm } from './education/education-form.service';
+import { MainService } from './main.service';
+import { Toast, ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -17,8 +20,10 @@ import { EducationForm } from './education/education-form.service';
     CommonModule,
     EducationModule,
     ProfileModule,
-    BottomNativationComponent
+    BottomNativationComponent,
+    ToastModule,
   ],
+  providers: [MessageService, MainService],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
@@ -26,9 +31,16 @@ export class AppComponent {
   title = 'homeWorkTask';
   isAnyFormDirty = false;
 
-  @ViewChild(EducationFormComponent) educationComponent!: EducationFormComponent;
+  constructor(
+    public readonly mainService: MainService,
+    private messageService: MessageService,
+    private cdf: ChangeDetectorRef
+  ) {}
+
+  @ViewChild(EducationFormComponent)
+  educationComponent!: EducationFormComponent;
   @ViewChild(ProfileFormComponent) profileComponent!: ProfileFormComponent;
-  
+
   handleAnyFormDirty(value: boolean) {
     this.isAnyFormDirty = value;
   }
@@ -38,7 +50,7 @@ export class AppComponent {
     email: 'sagarrajak858@gmail.com',
     phoneNumber: '7750811799',
     address: 'sdsdfsdf',
-    gender: GenderEnum.male
+    gender: GenderEnum.male,
   };
 
   educationform: EducationForm = {
@@ -51,5 +63,39 @@ export class AppComponent {
     this.profileComponent?.restoreForm();
   }
 
+  public async handleSubmit() {
+    
+    if (this.profileComponent.profileForm.invalid) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Invalid profile form!',
+      });
+    }
+    if (this.educationComponent.educationForm.invalid) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Invalid education form!',
+      });
+    }
 
+    this.cdf.detectChanges();
+
+    const educationForm = this.educationComponent.getData();
+    const profileForm = this.profileComponent.getData();
+    const graduationPromise = this.mainService.postGrduationData(
+      educationForm as any,
+      1
+    );
+    const profilePromise = this.mainService.postProfile(profileForm as any, 1);
+
+    try {
+      const data = await Promise.all([graduationPromise, profilePromise]);
+      this.profileForm = profileForm as any;
+      this.educationform = educationForm as any;
+      this.messageService.add({severity: 'success', summary: "Form updates successfully!"})
+    } catch (err) {
+      console.error('unable to submit');
+      this.messageService.add({severity: 'error', summary: "Unable to submit!"})
+    }
+  }
 }

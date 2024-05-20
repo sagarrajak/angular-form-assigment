@@ -11,6 +11,5 @@ import { PrimengModule } from '../primeng/primeng.module';
 export class BottomNativationComponent {
   @Output() onClickApply = new EventEmitter<any>();
   @Output() onClickCancel = new EventEmitter<any>();
-
   
 }

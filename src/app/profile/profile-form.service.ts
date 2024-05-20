@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { phoneNumberValidator } from '../validators/phoneNumberValidator';
 import { AbstractBaseUserRestoreForm } from '../services/UserRestoreFormInterface';
+import { phoneNumberValidator } from '../validators/phoneNumberValidator';
 
 export enum GenderEnum {
   male = 'male',
@@ -10,30 +10,19 @@ export enum GenderEnum {
 }
 
 export interface ProfileFormControl {
-  name: FormControl<string | null> ;
   email: FormControl<string | null>;
   phoneNumber: FormControl<string | null>;
   address: FormControl<string | null>;
   gender?: FormControl<string | null>;
+  name: FormControl<string | null> ;
 }
 
-export type ProfileForm = {[K in keyof ProfileFormControl]: ProfileFormControl[K] extends FormControl<infer T> ? T : any}
+export type ProfileForm = {[K in keyof ProfileFormControl]: ProfileFormControl[K] extends FormControl<infer T> ? T | null: any}
 
 @Injectable()
 export class ProfileFormService extends AbstractBaseUserRestoreForm<FormGroup<ProfileFormControl>> {
  
-  constructor() {
-    super();
-    this.formGroup.valueChanges.subscribe((data) => {
-      this.isChange++;
-      if (this.isChange == 2) {
-        this.subscriber.forEach(callBack => {
-          callBack(true);
-        })
-      }
-    });
-  }
-
+    
   private values: ProfileForm = {
     name: '',
     email: '',
@@ -41,15 +30,6 @@ export class ProfileFormService extends AbstractBaseUserRestoreForm<FormGroup<Pr
     address: '',
     gender: '',
   };
-
-  setInitialValue(profileForm: ProfileForm) {
-    this.values = profileForm;
-    this.isChange = 0;
-    this.formGroup.reset(this.values);
-    this.subscriber.forEach(callBack => {
-      callBack(false);
-    })
-  }
 
   public formGroup = new FormGroup<ProfileFormControl>({
     name: new FormControl(this.values.name, [
@@ -67,7 +47,30 @@ export class ProfileFormService extends AbstractBaseUserRestoreForm<FormGroup<Pr
     address: new FormControl(this.values.address, [Validators.required]),
     gender: new FormControl(this.values.gender, [Validators.required]),
   });
-  
+
+
+  constructor() {
+    super();
+    this.formGroup.valueChanges.subscribe((data) => {
+      this.isChange++;
+      if (this.isChange == 2) {
+        this.subscriber.forEach(callBack => {
+          callBack(true);
+        })
+      }
+    });
+  }
+
+  setInitialValue(profileForm: ProfileForm) {
+    this.values = profileForm;
+    this.isChange = 0;
+    this.formGroup.reset(this.values);
+    this.subscriber.forEach(callBack => {
+      callBack(false);
+    })
+  }
+
+ 
 
   public restoreValues() {
     if (this.isChange && this.values) {

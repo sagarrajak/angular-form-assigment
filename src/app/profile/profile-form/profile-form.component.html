@@ -1,5 +1,5 @@
 <p-card header="Profile info" class="container">
-    <form [formGroup]="profileForm" (ngSubmit)="submitForm()" novalidate class="formContainer">
+    <form [formGroup]="profileForm"  novalidate class="formContainer">
         <div class="formItem">
             <label for="username">Username</label>
             <input pInputText id="username" aria-describedby="username-help" formControlName="name" />
@@ -46,16 +46,6 @@
             </div>
             <app-show-error [control]="getControl('gender')"></app-show-error>
         </div>
-
-        <!-- <div class="flex flex-row">
-            <p-button label="Submit" type="Submit" />
-            <p-button 
-                label="cancel" 
-                *ngIf="showCancelButton" 
-                severity="secondary"
-                (onClick)="restoreForm()" 
-            />
-        </div> -->
     </form>
 </p-card>
 

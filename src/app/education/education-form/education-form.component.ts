@@ -9,10 +9,13 @@ import { EducationForm, EducationFormService } from '../education-form.service';
 export class EducationFormComponent {
   @Output() onFormDirty = new EventEmitter<boolean>();
   @Input() set initValues(educationForm: EducationForm) {
+      console.log(educationForm);
       this.educationFormService.setInitialValue(educationForm);
   }
 
-  constructor(private readonly educationFormService: EducationFormService) {
+  constructor(
+    private readonly educationFormService: EducationFormService,
+  ) {
     this.educationFormService.addSubsciber((value) => {
       this.onFormDirty.emit(value);
     });
@@ -23,8 +26,8 @@ export class EducationFormComponent {
     return this.educationFormService.formGroup;
   }
 
-  submitForm() {
-    console.log(this.educationFormService.values);
+  getData() {
+    return this.educationFormService.getValues();
   }
 
   getControl(key: keyof EducationForm) {
