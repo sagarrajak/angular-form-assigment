@@ -10,7 +10,7 @@ export class ProfileFormComponent {
   constructor(private readonly profileFormService: ProfileFormService) {}
 
   get profileForm() {
-    return this.profileFormService.profileForm;
+    return this.profileFormService.formGroup;
   }
 
   submitForm() {

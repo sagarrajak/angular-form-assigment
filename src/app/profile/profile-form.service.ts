@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { phoneNumberValidator } from '../validators/phoneNumberValidator';
+import { AbstractBaseUserRestoreForm } from '../services/UserRestoreFormInterface';
 
 enum GenderEnum {
   male = 'male',
@@ -19,14 +20,14 @@ export interface ProfileFormControl {
 export type ProfileForm = {[K in keyof ProfileFormControl]: ProfileFormControl[K] extends FormControl<infer T> ? T : any}
 
 @Injectable()
-export class ProfileFormService {
-  private isChange: boolean = false;
-
+export class ProfileFormService extends AbstractBaseUserRestoreForm<FormGroup<ProfileFormControl>> {
+ 
   constructor() {
-    this.profileForm.valueChanges.subscribe((data) => {
+    super();
+    this.formGroup.valueChanges.subscribe((data) => {
       if (!this.isChange) {
         this.isChange = true;
-        this.values = this.profileForm.value as ProfileForm;
+        this.values = this.formGroup.value as ProfileForm;
       }
     });
   }
@@ -39,7 +40,7 @@ export class ProfileFormService {
     gender: GenderEnum.male
   };
 
-  public profileForm = new FormGroup<ProfileFormControl>({
+  public formGroup = new FormGroup<ProfileFormControl>({
     name: new FormControl(this.values.name, [
       Validators.required,
       Validators.min(2),
@@ -62,20 +63,8 @@ export class ProfileFormService {
   public restoreValues() {
     if (this.isChange && this.values) {
       for (let key of Object.keys(this.values)) {
-        this.profileForm.get(key)?.setValue((this.values as any)[key])
+        this.formGroup.get(key)?.setValue((this.values as any)[key])
       }
     }
-  }
-
-  public getValues() {
-    return this.profileForm.value;
-  }
-
-  get isFormDirty() {
-    return this.profileForm.dirty;
-  }
-
-  public getFormControl(key: keyof ProfileForm) {
-    return this.profileForm.controls[key];
   }
 }

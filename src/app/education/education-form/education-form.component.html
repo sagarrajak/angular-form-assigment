@@ -1,0 +1,19 @@
+<p-card header="Profile info" class="container">
+    <form [formGroup]="educationForm" (ngSubmit)="submitForm()" novalidate class="formContainer">
+        <div class="formItem">
+            <label for="username">Graduation marks</label>
+            <input pInputText id="graduactionMarks" aria-describedby="username-help" formControlName="graduactionMarks" />
+            <app-show-error [control]="getControl('graduactionMarks')"></app-show-error>
+        </div>
+        <div class="formItem">
+            <label for="email">Post graduation marks</label>
+            <input pInputText id="email" aria-describedby="please enter email" formControlName="postgraducationMarks" />
+            <app-show-error [control]="getControl('postgraducationMarks')"></app-show-error>
+        </div>
+
+        <div class="flex flex-row">
+            <p-button label="Submit" type="Submit" />
+            <p-button label="cancel" *ngIf="showCancelButton" severity="secondary" (onClick)="restoreForm()" />
+        </div>
+    </form>
+</p-card>

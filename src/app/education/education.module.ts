@@ -4,10 +4,16 @@ import { EducationFormService } from './education-form.service';
 import { EducationFormComponent } from './education-form/education-form.component';
 import { PrimengModule } from '../primeng/primeng.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ShowErrorComponent } from '../show-error/show-error.component';
 
 @NgModule({
   declarations: [EducationFormComponent],
-  imports: [CommonModule, ReactiveFormsModule, PrimengModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    PrimengModule,
+    ShowErrorComponent,
+  ],
   providers: [EducationFormService],
   exports: [EducationFormComponent],
 })
