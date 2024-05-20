@@ -2,17 +2,17 @@
   "userProfile": [
     {
       "name": "sagarrrrr",
-      "email": "sagarrajak858@gmail.com",
-      "phoneNumber": "7750811799",
-      "address": "sdsdfsdf",
-      "gender": "male",
+      "email": "sagarrrajak858@gmail.com",
+      "phoneNumber": "7750811779",
+      "address": "sdsdfsdfdfdfdfdf",
+      "gender": "others",
       "id": "1"
     }
   ],
   "education": [
     {
-      "graduactionMarks": 12,
-      "postgraducationMarks": 14,
+      "graduactionMarks": "12",
+      "postgraducationMarks": "36",
       "id": "1"
     }
   ],

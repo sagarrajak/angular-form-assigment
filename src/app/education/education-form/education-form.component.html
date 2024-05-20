@@ -7,7 +7,8 @@
         </div>
         <div class="formItem">
             <label for="email">Post graduation marks</label>
-            <input pInputText id="email" aria-describedby="please enter email" formControlName="postgraducationMarks" />
+            <input 
+                pInputText id="postgraducationMarks" aria-describedby="please enter post graduation marks" formControlName="postgraducationMarks" />
             <app-show-error [control]="getControl('postgraducationMarks')"></app-show-error>
         </div>
     </form>

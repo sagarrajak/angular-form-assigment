@@ -13,4 +13,5 @@ import { FormControl } from '@angular/forms';
 export class ShowErrorComponent {
     @Input("control")
     control!: any;
+  JSON = window.JSON;
 }

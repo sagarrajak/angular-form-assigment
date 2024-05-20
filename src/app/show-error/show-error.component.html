@@ -11,6 +11,12 @@
     <div *ngIf="control.errors.greaterThan" class="label label--danger">
         {{ control.errors.greaterThan }}
     </div>
+    <div *ngIf="control.errors.min" class="label label--danger">
+        Mininum value allowed is {{ control.errors.min.min }}
+    </div>
+    <div *ngIf="control.errors.max" class="label label--danger">
+        Maxium value allowed is {{ control.errors.max.max }}
+    </div>
     <div *ngIf="control.errors.email" class="label label--danger">
         Invalid Email
     </div>
@@ -23,4 +29,14 @@
     <div *ngIf="control.errors.phoneNumber" class="label label--danger">
         Invalid phone number
     </div>
+    <div *ngIf="control.errors.notANumber" class="label label--danger">
+        Value must be a number
+    </div>
+    <div *ngIf="control.errors.maxlength" class="label label--danger">
+        <!-- Maxium length value allowed is {{ control.errors.maxlength.requiredLength}}  -->
+        Percentage can't be more then 4 digits!
+    </div>
+    <!-- <div *ngIf="control.errors">
+        {{ JSON.stringify(control.errors)}}
+    </div> -->
 </div>

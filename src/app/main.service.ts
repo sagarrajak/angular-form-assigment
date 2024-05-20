@@ -27,4 +27,22 @@ export class MainService {
       this.http.put(url, { ...data, id }, { headers })
     );
   }
+
+  public async getProfile( id: number) {
+    const url = `http://localhost:3000/userProfile/${id}`;
+
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return await firstValueFrom(
+      this.http.get(url, { headers })
+    );
+  }
+
+  public async getGrduationData( id: number) {
+    const url = `http://localhost:3000/education/${id}`;
+
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return await firstValueFrom(
+      this.http.get(url, { headers })
+    );
+  }
 }

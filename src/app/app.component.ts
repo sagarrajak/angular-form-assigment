@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { EducationModule } from './education/education.module';
 import { ProfileModule } from './profile/profile.module';
@@ -27,7 +27,7 @@ import { MessageService } from 'primeng/api';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
-export class AppComponent {
+export class AppComponent implements OnInit{
   title = 'homeWorkTask';
   isAnyFormDirty = false;
 
@@ -36,7 +36,7 @@ export class AppComponent {
     private messageService: MessageService,
     private cdf: ChangeDetectorRef
   ) {}
-
+  
   @ViewChild(EducationFormComponent)
   educationComponent!: EducationFormComponent;
   @ViewChild(ProfileFormComponent) profileComponent!: ProfileFormComponent;
@@ -44,6 +44,21 @@ export class AppComponent {
   handleAnyFormDirty(value: boolean) {
     this.isAnyFormDirty = value;
   }
+
+
+  async ngOnInit(): Promise<void> {
+    const promiseGrudation = this.mainService.getGrduationData(1)
+    const promiseProfile = this.mainService.getProfile(1)
+    try {
+      const data = await Promise.all([promiseGrudation, promiseProfile]);
+      this.profileForm = data[1] as any;
+      this.educationform = data[0] as any;
+      console.log(data);
+    } catch (err) {
+      console.error('unable to submit');
+    }
+  }
+
 
   profileForm: ProfileForm = {
     name: 'sagar',
@@ -70,12 +85,14 @@ export class AppComponent {
         severity: 'error',
         summary: 'Invalid profile form!',
       });
+      return;
     }
     if (this.educationComponent.educationForm.invalid) {
       this.messageService.add({
         severity: 'error',
         summary: 'Invalid education form!',
       });
+      return;
     }
 
     this.cdf.detectChanges();

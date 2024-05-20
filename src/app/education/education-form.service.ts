@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AbstractBaseUserRestoreForm } from '../services/UserRestoreFormInterface';
+import { numberValidator } from '../validators/numberValidator';
 
 export type EducationForm = {
   graduactionMarks: number;
@@ -23,13 +24,17 @@ export class EducationFormService extends AbstractBaseUserRestoreForm<
   public formGroup = new FormGroup<EducationFormControl>({
     graduactionMarks: new FormControl(this.values.graduactionMarks, [
       Validators.required,
+      Validators.maxLength(4),
       Validators.max(100),
       Validators.min(0),
+      numberValidator()
     ]),
     postgraducationMarks: new FormControl(this.values.postgraducationMarks, [
       Validators.required,
       Validators.max(100),
+      Validators.maxLength(4),
       Validators.min(0),
+      numberValidator()
     ]),
   });
 
