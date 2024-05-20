@@ -3,7 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { phoneNumberValidator } from '../validators/phoneNumberValidator';
 import { AbstractBaseUserRestoreForm } from '../services/UserRestoreFormInterface';
 
-enum GenderEnum {
+export enum GenderEnum {
   male = 'male',
   female = 'female',
   other = 'other',
@@ -12,7 +12,7 @@ enum GenderEnum {
 export interface ProfileFormControl {
   name: FormControl<string | null> ;
   email: FormControl<string | null>;
-  phoneNumber: FormControl<number | null>;
+  phoneNumber: FormControl<string | null>;
   address: FormControl<string | null>;
   gender?: FormControl<string | null>;
 }
@@ -25,20 +25,31 @@ export class ProfileFormService extends AbstractBaseUserRestoreForm<FormGroup<Pr
   constructor() {
     super();
     this.formGroup.valueChanges.subscribe((data) => {
-      if (!this.isChange) {
-        this.isChange = true;
-        this.values = this.formGroup.value as ProfileForm;
+      this.isChange++;
+      if (this.isChange == 2) {
+        this.subscriber.forEach(callBack => {
+          callBack(true);
+        })
       }
     });
   }
 
   private values: ProfileForm = {
-    name: 'sagar',
-    email: 'sagarrajak858@gmail.com',
-    phoneNumber: 7750811799,
-    address: 'sdsdfsdf',
-    gender: GenderEnum.male
+    name: '',
+    email: '',
+    phoneNumber: '',
+    address: '',
+    gender: '',
   };
+
+  setInitialValue(profileForm: ProfileForm) {
+    this.values = profileForm;
+    this.isChange = 0;
+    this.formGroup.reset(this.values);
+    this.subscriber.forEach(callBack => {
+      callBack(false);
+    })
+  }
 
   public formGroup = new FormGroup<ProfileFormControl>({
     name: new FormControl(this.values.name, [
@@ -57,14 +68,14 @@ export class ProfileFormService extends AbstractBaseUserRestoreForm<FormGroup<Pr
     gender: new FormControl(this.values.gender, [Validators.required]),
   });
   
-  
-  public setInitialValue() {}
 
   public restoreValues() {
     if (this.isChange && this.values) {
-      for (let key of Object.keys(this.values)) {
-        this.formGroup.get(key)?.setValue((this.values as any)[key])
-      }
+      this.formGroup.reset(this.values);
+      this.isChange = 0;
+      this.subscriber.forEach(callBack => {
+        callBack(false);
+      })
     }
   }
 }

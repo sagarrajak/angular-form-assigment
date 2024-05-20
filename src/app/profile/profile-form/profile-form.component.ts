@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ProfileForm, ProfileFormService } from '../profile-form.service';
 
 @Component({
@@ -7,7 +7,17 @@ import { ProfileForm, ProfileFormService } from '../profile-form.service';
   styleUrl: './profile-form.component.scss',
 })
 export class ProfileFormComponent {
-  constructor(private readonly profileFormService: ProfileFormService) {}
+
+  @Output() onFormDirty = new EventEmitter<boolean>();
+  @Input() set initValues(profileForm: ProfileForm) {
+    this.profileFormService.setInitialValue(profileForm);
+  }
+
+  constructor(private readonly profileFormService: ProfileFormService) {
+    this.profileFormService.addSubsciber((value) => {
+        this.onFormDirty.emit(value);
+    });
+  }
 
   get profileForm() {
     return this.profileFormService.formGroup;

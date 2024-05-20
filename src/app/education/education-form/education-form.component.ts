@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { EducationForm, EducationFormService } from '../education-form.service';
 
 @Component({
@@ -7,7 +7,17 @@ import { EducationForm, EducationFormService } from '../education-form.service';
   styleUrl: './education-form.component.scss',
 })
 export class EducationFormComponent {
-  constructor(private readonly educationFormService: EducationFormService) {}
+  @Output() onFormDirty = new EventEmitter<boolean>();
+  @Input() set initValues(educationForm: EducationForm) {
+      this.educationFormService.setInitialValue(educationForm);
+  }
+
+  constructor(private readonly educationFormService: EducationFormService) {
+    this.educationFormService.addSubsciber((value) => {
+      this.onFormDirty.emit(value);
+    });
+  }
+
 
   get educationForm() {
     return this.educationFormService.formGroup;

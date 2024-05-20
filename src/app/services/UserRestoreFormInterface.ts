@@ -1,10 +1,11 @@
 import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
+import { v4 as uuidv4 } from 'uuid';
 
 export interface UserRestoreFormInterface<T extends FormGroup> {
   formGroup: T;
-  isChange: boolean;
+  isChange: number;
   restoreValues(): void;
-  setInitialValue(): void;
+  setInitialValue(value: any): void;
   getValues(): void;
   isFormDirty: boolean;
   getFormControl(key: T extends FormGroup<infer F> ? F : any): void;
@@ -14,11 +15,12 @@ export abstract class AbstractBaseUserRestoreForm<T extends FormGroup>
   implements UserRestoreFormInterface<T>
 {
   public abstract formGroup: T;
-  isChange: boolean = false;
+  protected subscriber = new Map<string, (value: boolean) => void>();
+  isChange: number = 0;
 
   abstract restoreValues(): void;
 
-  abstract setInitialValue(): void;
+  abstract setInitialValue(value: any): void;
 
   public getValues() {
     return this.formGroup.value;
@@ -28,7 +30,13 @@ export abstract class AbstractBaseUserRestoreForm<T extends FormGroup>
     return this.formGroup.dirty;
   }
 
-  public getFormControl(key: T extends FormGroup<infer F> ? F extends {[key in infer X]: FormControl<infer X>} ? X : any : any) {
+  public getFormControl(key: any) {
     return this.formGroup.controls[key];
+  }
+
+  public addSubsciber(func: (value: boolean) => void) {
+    const id = uuidv4()
+    this.subscriber.set(id, func);
+    return id;
   }
 }

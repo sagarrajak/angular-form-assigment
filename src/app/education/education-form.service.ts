@@ -17,19 +17,28 @@ export class EducationFormService extends AbstractBaseUserRestoreForm<
   FormGroup<EducationFormControl>
 > {
 
+
   constructor() {
     super()
+    this.formGroup.valueChanges.subscribe((data) => {
+      this.isChange++;
+      if (this.isChange == 2) {
+        this.subscriber.forEach(callBack => {
+          callBack(true);
+        })
+      }
+    });
   }
 
   restoreValues(): void {
-    if (this.isChange && this.values) {
-      for (let key of Object.keys(this.values)) {
-        this.formGroup.get(key)?.setValue((this.values as any)[key])
-      }
+    if (this.isChange) {
+      this.formGroup.reset(this.values);
+      this.isChange = 0;
+      this.subscriber.forEach(callBack => {
+        callBack(false);
+      })
     }
   }
-
-  setInitialValue(): void {}
 
   values: EducationForm = {
     graduactionMarks: 0,
@@ -47,4 +56,13 @@ export class EducationFormService extends AbstractBaseUserRestoreForm<
       Validators.email,
     ]),
   });
+
+  setInitialValue(educationForm: EducationForm) {
+    this.values = educationForm;
+    this.isChange = 0;
+    this.formGroup.reset(this.values);
+    this.subscriber.forEach(callBack => {
+      callBack(false);
+    })
+  }
 }

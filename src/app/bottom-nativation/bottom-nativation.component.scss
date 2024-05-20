@@ -1,0 +1,22 @@
+.container {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    height: 60px;
+    width: 100%;
+    color: var(--primary-color);
+    background-color: var(--surface-section);
+    border-top: 1px solid var(--surface-border);
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    transition: opacity 0.3s ease-in-out;
+
+    &--button {
+        margin-right: 20px;
+    }
+
+    &:last-child {
+        margin-right: 20px;
+    }
+}

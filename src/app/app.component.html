@@ -1,10 +1,19 @@
 <div class="flexContainer">
     <div>
-        <app-education-form></app-education-form>
+        <app-education-form
+        [initValues]="educationform"
+         (onFormDirty)="handleAnyFormDirty($event)"
+         ></app-education-form>
     </div>
     <div>
-        <app-profile-form></app-profile-form>
+        <app-profile-form
+        [initValues]="profileForm" 
+        (onFormDirty)="handleAnyFormDirty($event)"></app-profile-form>
     </div>
 </div>
-
+<app-bottom-nativation 
+    *ngIf="isAnyFormDirty"
+    (onClickCancel)="restoreForm()"
+    >
+</app-bottom-nativation>
 <router-outlet />
